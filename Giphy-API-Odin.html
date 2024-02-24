@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        #image {
+  width: 400px; /* Adjust the width as desired */
+  height: 350px; /* Maintain aspect ratio */
+}
+
+#keyword {
+  display: block;
+  margin-bottom: 10px;
+}
+
+button {
+  display: block;
+  margin-bottom: 10px;
+}
+    </style>
+  <meta charset="UTF-8">
+  <title>Giphy API</title>
+</head>
+<body>
+  <input type="text" id="keyword" placeholder="Write search keyword">
+  <button id="fetch-button" onclick ="fetchImage()">Fetch new image</button>
+  <img src="#" id="image">
+
+  <script>
+    const img = document.getElementById('image');
+    const keywordInput = document.getElementById('keyword');
+
+    // Function to generate a random keyword from an array of keywords
+    const getRandomKeyword = () => {
+      const keywords = ['random', 'image', 'kids', 'cat', 'dog', 'music', 'love', 'heart', 'sea'];
+      return keywords[Math.floor(Math.random() * keywords.length)];
+    }
+
+    // Function to fetch image based on keyword
+    const fetchImage = async () => {
+      const keyword = keywordInput.value || getRandomKeyword(); // If input is empty, use random keyword
+      const apiUrl = `https://api.giphy.com/v1/gifs/translate?api_key=RL5r1TYRSR1WOlcpQXOMm7wELflyQVGd&s=${keyword}`;
+
+      try{
+      const response = await fetch(apiUrl, { mode: 'cors' });
+      const data = await response.json();
+        img.src = data.data.images.original.url;
+        }
+        catch(error) {
+          console.log('Error:', error);
+        }}
+
+    // Function to handle click event
+  const handleClick = () => {
+    fetchImage();
+  }
+
+  // Function to handle key press event
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 13) { // Enter key
+      fetchImage();
+    }
+  }
+
+  // Attach event listeners
+  document.getElementById('keyword').addEventListener('keypress', handleKeyPress);
+  document.getElementById('fetch-button').addEventListener('click', handleClick);
+
+  // Fetch a random image on page refresh
+  window.addEventListener('load', fetchImage);
+</script>
